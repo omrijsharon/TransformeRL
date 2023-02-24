@@ -4,20 +4,20 @@ import gym
 import matplotlib.pyplot as plt
 import numpy as np
 
-from experience import ExperienceReplay, collect_experience
-from model import TransformerRL
+from core.experience import ExperienceReplay, collect_experience
+from core.model import TransformerRL
 
 # env is cartpole v1:
 env = gym.make('CartPole-v1')
 # env is lunarlander v2:
-# env = gym.make('LunarLander-v2')
+# env = gym.make('LunarLanderContinuous-v2')
 experience_capacity = 10000
 experience = ExperienceReplay(env, experience_capacity)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Initialize the model
-model = TransformerRL(state_dim=np.prod(env.observation_space.shape),
-                      action_dim=env.action_space.n,
+model = TransformerRL(state_space=env.observation_space.shape,
+                      action_space=env.action_space,
                       d_model=64,
                       nhead=4,
                       num_layers=2,
